@@ -3,14 +3,13 @@ import { StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
-export default function FeedScreen({ navigation }: RootTabScreenProps<'Feed'>) {
+const FeedScreen = ({ navigation }: RootTabScreenProps<'Feed'>) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Rewards</Text>
-
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -28,3 +27,5 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 });
+
+export default FeedScreen;

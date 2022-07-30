@@ -4,14 +4,14 @@ import { Text, View } from '../components/Themed';
 import Separator from '../components/Separator';
 import { RootTabScreenProps } from '../types';
 
-export default function MyRewardsScreen({ navigation }: RootTabScreenProps<'MyRewards'>) {
+const MyRewardsScreen = ({ navigation }: RootTabScreenProps<'MyRewards'>) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab Two</Text>
       <Separator />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -24,3 +24,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default MyRewardsScreen;

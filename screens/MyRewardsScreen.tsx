@@ -1,13 +1,12 @@
 import { StyleSheet } from 'react-native';
 
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 import Separator from '../components/Separator';
 import { RootTabScreenProps } from '../types';
 
 const MyRewardsScreen = ({ navigation }: RootTabScreenProps<'MyRewards'>) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
       <Separator />
     </View>
   );

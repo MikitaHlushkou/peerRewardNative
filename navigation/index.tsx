@@ -1,19 +1,20 @@
 import { FontAwesome } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
 
+import TabIconWithLabel from '../components/TabIconWithLabel';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import FeedScreen from '../screens/FeedScreen';
 import MyRewardsScreen from '../screens/MyRewardsScreen';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+
 import LinkingConfiguration from './LinkingConfiguration';
 import MyProfileScreen from '../screens/MyProfileScreen';
+
+import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -40,24 +41,26 @@ function RootNavigator() {
   );
 }
 
-const BottomTab = createBottomTabNavigator<RootTabParamList>();
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+const Tab = createMaterialTopTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (
-    <BottomTab.Navigator
+    <Tab.Navigator
       initialRouteName="Feed"
+      tabBarPosition={'bottom'}
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarInactiveTintColor: Colors[colorScheme].disabled,
       }}
     >
-      <BottomTab.Screen
+      <Tab.Screen
         name="Feed"
         component={FeedScreen}
         options={({ navigation }: RootTabScreenProps<'Feed'>) => ({
           title: 'Feed',
-          tabBarIcon: ({ color }) => <TabBarIcon name="list-alt" color={color} />,
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate('Modal')}
@@ -73,31 +76,31 @@ function BottomTabNavigator() {
               />
             </Pressable>
           ),
+          tabBarLabel: ({ color }) => (
+            <TabIconWithLabel label={'Feed'} iconName={'list-alt'} color={color} />
+          ),
         })}
       />
-      <BottomTab.Screen
+      <Tab.Screen
         name="MyRewards"
         component={MyRewardsScreen}
         options={{
           title: 'My rewards',
-          tabBarIcon: ({ color }) => <TabBarIcon name="heart-o" color={color} />,
+          tabBarLabel: ({ color }) => (
+            <TabIconWithLabel color={color} iconName={'heart-o'} label={'My Rewards'} />
+          ),
         }}
       />
-      <BottomTab.Screen
+      <Tab.Screen
         name="MyProfile"
         component={MyProfileScreen}
         options={{
           title: 'My profile',
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          tabBarLabel: ({ color }) => (
+            <TabIconWithLabel label={'My Profile'} iconName={'home'} color={color} />
+          ),
         }}
       />
-    </BottomTab.Navigator>
+    </Tab.Navigator>
   );
-}
-
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
 }

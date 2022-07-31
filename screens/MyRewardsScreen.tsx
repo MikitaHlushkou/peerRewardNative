@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { View } from '../components/Themed';
-import Separator from '../components/Separator';
+import { Separator, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
 const MyRewardsScreen = ({ navigation }: RootTabScreenProps<'MyRewards'>) => {

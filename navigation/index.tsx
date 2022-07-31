@@ -15,6 +15,8 @@ import LinkingConfiguration from './LinkingConfiguration';
 import MyProfileScreen from '../screens/MyProfileScreen';
 
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import Header from '../components/Header';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -32,7 +34,14 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen
+        name="Root"
+        component={BottomTabNavigator}
+        options={{
+          headerShown: true,
+          header: Header,
+        }}
+      />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
@@ -40,8 +49,6 @@ function RootNavigator() {
     </Stack.Navigator>
   );
 }
-
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 const Tab = createMaterialTopTabNavigator<RootTabParamList>();
 
@@ -95,6 +102,7 @@ function BottomTabNavigator() {
         name="MyProfile"
         component={MyProfileScreen}
         options={{
+          tabBarContentContainerStyle: { flex: 1 },
           title: 'My profile',
           tabBarLabel: ({ color }) => (
             <TabIconWithLabel label={'My Profile'} iconName={'home'} color={color} />

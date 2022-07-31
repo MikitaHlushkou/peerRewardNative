@@ -38,3 +38,13 @@ export function View(props: ViewProps) {
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
+
+export const Separator = () => {
+  return (
+    <View
+      style={{ marginVertical: 10, height: 1, width: '100%' }}
+      lightColor="rgba(255,255,255,0.1)"
+      darkColor="#eee"
+    />
+  );
+};

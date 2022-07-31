@@ -1,14 +1,32 @@
-import { StyleSheet } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
 
-import { View } from '../components/Themed';
+import { Separator, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-import Separator from '../components/Separator';
+import RewardMessage, { IRewardMessage } from '../components/RewardMessage';
+import { mockedRewards } from '../mocks/MOCK_DATA';
 
 const MyProfileScreen = ({ navigation }: RootTabScreenProps<'MyProfile'>) => {
+  // Add message id for key and filter for userId
+  const rewardMessages: IRewardMessage[] = mockedRewards.map(
+    ({ userFullName, userAvatarUrl, senderFullName, createDate, message }) => ({
+      userFullName,
+      userAvatarUrl,
+      senderFullName,
+      createDate,
+      message,
+    }),
+  );
   return (
-    <View style={styles.container}>
-      <Separator />
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <FlatList
+          contentContainerStyle={{ paddingBottom: 20 }}
+          ItemSeparatorComponent={Separator}
+          data={rewardMessages}
+          renderItem={RewardMessage}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -21,11 +39,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
 });
 

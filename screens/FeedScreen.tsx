@@ -4,6 +4,7 @@ import { Separator, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import RewardMessage from '../components/RewardMessage';
 import useRewards from '../hooks/useRewards';
+import { getFormattedRewardsArray } from '../utils/rewardUtils';
 
 const FeedScreen = ({ navigation }: RootTabScreenProps<'Feed'>) => {
   const { error, status, data } = useRewards();
@@ -17,28 +18,21 @@ const FeedScreen = ({ navigation }: RootTabScreenProps<'Feed'>) => {
       return <Text style={{ color: 'white' }}> Error: {error?.message}</Text>;
     }
   }
-  const rewardMessages = data?.map(
-    ({ userFullName, userAvatarUrl, senderFullName, createdAt, message }) => ({
-      userFullName,
-      userAvatarUrl,
-      senderFullName,
-      createdAt,
-      message,
-    }),
-  );
-
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <FlatList
-          ItemSeparatorComponent={Separator}
-          ListFooterComponent={Separator}
-          data={rewardMessages}
-          renderItem={RewardMessage}
-        />
-      </View>
-    </SafeAreaView>
-  );
+  if (data) {
+    const rewardMessages = getFormattedRewardsArray(data);
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.container}>
+          <FlatList
+            ItemSeparatorComponent={Separator}
+            ListFooterComponent={Separator}
+            data={rewardMessages}
+            renderItem={RewardMessage}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

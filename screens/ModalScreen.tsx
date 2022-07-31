@@ -10,10 +10,11 @@ import {
 import { useFormik } from 'formik';
 
 import { ModalView, Text, ThemedInput, View } from '../components/Themed';
-
-import useColorScheme from '../hooks/useColorScheme';
 import { RootStackScreenProps } from '../types';
 import React from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { addNewReward } from '../service/rewardsApi';
+import { IRewardMessage } from '../components/RewardMessage';
 
 interface IRewardForm {
   name: string;
@@ -24,10 +25,22 @@ interface IRewardForm {
 export default function ModalScreen({ navigation }: RootStackScreenProps<'Modal'>) {
   const initialFormValues = { name: '', reward: '', message: '' };
 
+  const mutation = useMutation(addNewReward);
+
   const { handleSubmit, handleChange, handleBlur, values } = useFormik({
     initialValues: initialFormValues,
     onSubmit: (formValues: IRewardForm) => {
       navigation.navigate('Root');
+      const reward: IRewardMessage = {
+        ...formValues,
+        userAvatarUrl: 'https://robohash.org/facerevoluptatemquia.png?size=50x50&set=set1',
+        senderFullName: 'new test full name',
+        userFullName: 'jacob jss',
+        createdAt: new Date(),
+        userId: 'Jacob',
+      };
+      mutation.mutate(reward);
+
       console.log('form values', formValues);
     },
   });

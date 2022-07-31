@@ -1,4 +1,5 @@
-import { FlatList, SafeAreaView, StyleSheet, Text } from 'react-native';
+import React from 'react';
+import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { Separator, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import RewardMessage from '../components/RewardMessage';
@@ -8,7 +9,7 @@ const FeedScreen = ({ navigation }: RootTabScreenProps<'Feed'>) => {
   const { error, status, data } = useRewards();
 
   if (status === 'loading') {
-    return <Text>Loading...</Text>;
+    return <ActivityIndicator size="large" color="#00ff00" />;
   }
 
   if (status === 'error') {

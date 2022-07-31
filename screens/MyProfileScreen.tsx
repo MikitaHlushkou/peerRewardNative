@@ -1,4 +1,4 @@
-import {  SafeAreaView, StyleSheet } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 
 import { View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';

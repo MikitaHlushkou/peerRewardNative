@@ -1,18 +1,27 @@
-import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
-
+import { FlatList, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { Separator, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-import { mockedRewards } from '../mocks/MOCK_DATA';
-import RewardMessage, { IRewardMessage } from '../components/RewardMessage';
+import RewardMessage from '../components/RewardMessage';
+import useRewards from '../hooks/useRewards';
 
 const FeedScreen = ({ navigation }: RootTabScreenProps<'Feed'>) => {
-  // Add message id for key
-  const rewardMessages: IRewardMessage[] = mockedRewards.map(
-    ({ userFullName, userAvatarUrl, senderFullName, createDate, message }) => ({
+  const { error, status, data } = useRewards();
+
+  if (status === 'loading') {
+    return <Text>Loading...</Text>;
+  }
+
+  if (status === 'error') {
+    if (error instanceof Error) {
+      return <Text style={{ color: 'white' }}> Error: {error?.message}</Text>;
+    }
+  }
+  const rewardMessages = data?.map(
+    ({ userFullName, userAvatarUrl, senderFullName, createdAt, message }) => ({
       userFullName,
       userAvatarUrl,
       senderFullName,
-      createDate,
+      createdAt,
       message,
     }),
   );

@@ -1,23 +1,24 @@
 import { Image, StyleSheet, View } from 'react-native';
 import { Text } from './Themed';
+import moment from 'moment';
 
 export interface IRewardMessage {
   userFullName: string;
   userAvatarUrl: string;
   senderFullName: string;
-  createDate: string | Date;
+  createdAt: string | Date;
   message: string;
 }
 
 const RewardMessage = ({ item }: { item: IRewardMessage }) => {
-  const { message, userAvatarUrl, userFullName, senderFullName, createDate } = item;
+  const { message, userAvatarUrl, userFullName, senderFullName, createdAt } = item;
   return (
     <View style={style.container}>
       <Image style={style.image} source={{ uri: userAvatarUrl }} />
 
       <View style={style.rewardInfoContainer}>
         <Text>{`${userFullName} rewarded by ${senderFullName}`}</Text>
-        <Text style={style.dateText}>{createDate}</Text>
+        <Text style={style.dateText}>{moment(createdAt).format('MM/DD HH:MM')}</Text>
         <Text>{message}</Text>
       </View>
     </View>

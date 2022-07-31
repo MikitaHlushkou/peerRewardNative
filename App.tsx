@@ -6,6 +6,10 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { SafeAreaView } from 'react-native';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
+
 const App = () => {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
@@ -14,12 +18,14 @@ const App = () => {
     return null;
   } else {
     return (
-      <SafeAreaProvider>
-        <SafeAreaView style={{ flex: 1, backgroundColor: 'black' }}>
-          <Navigation colorScheme={colorScheme} />
-          <StatusBar />
-        </SafeAreaView>
-      </SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        <SafeAreaProvider>
+          <SafeAreaView style={{ flex: 1, backgroundColor: 'black' }}>
+            <Navigation colorScheme={colorScheme} />
+            <StatusBar />
+          </SafeAreaView>
+        </SafeAreaProvider>
+      </QueryClientProvider>
     );
   }
 };

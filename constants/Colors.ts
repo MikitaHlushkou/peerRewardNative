@@ -6,6 +6,8 @@ export default {
   light: {
     text: '#000',
     background: '#fff',
+    modalBackground: '#212121',
+    inputBackground: '#212121',
     tint: tintColorLight,
     disabled: greyscale,
     tabIconDefault: '#ccc',
@@ -14,6 +16,8 @@ export default {
   dark: {
     text: '#fff',
     background: '#000',
+    modalBackground: '#212121',
+    inputBackground: '#212121',
     tint: tintColorDark,
     disabled: greyscale,
     tabIconDefault: '#ccc',

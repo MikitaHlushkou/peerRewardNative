@@ -1,7 +1,8 @@
-import { Text as DefaultText, View as DefaultView } from 'react-native';
+import { Text as DefaultText, TextInput, TextInputProps, View as DefaultView } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+import React from 'react';
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
@@ -39,12 +40,36 @@ export function View(props: ViewProps) {
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
 
+export function ModalView(props: ViewProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'modalBackground');
+
+  return <DefaultView style={[{ backgroundColor, flex: 1 }, style]} {...otherProps} />;
+}
+
 export const Separator = () => {
   return (
     <View
       style={{ marginVertical: 10, height: 1, width: '100%' }}
       lightColor="rgba(255,255,255,0.1)"
       darkColor="#eee"
+    />
+  );
+};
+
+export const ThemedInput = (props: TextInputProps) => {
+  const colorScheme = useColorScheme();
+  const { style, ...nonStyleProps } = props;
+  return (
+    <TextInput
+      style={[
+        {
+          color: Colors[colorScheme].text,
+          backgroundColor: Colors[colorScheme].inputBackground,
+        },
+        style,
+      ]}
+      {...nonStyleProps}
     />
   );
 };

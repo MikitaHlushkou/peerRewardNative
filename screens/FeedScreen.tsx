@@ -33,6 +33,7 @@ const FeedScreen = ({ navigation }: RootTabScreenProps<'Feed'>) => {
       </SafeAreaView>
     );
   }
+  return <Text> No Items Presented</Text>;
 };
 
 const styles = StyleSheet.create({

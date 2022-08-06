@@ -1,4 +1,4 @@
-import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native';
 
 import { Separator, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
@@ -33,6 +33,7 @@ const MyRewardsScreen = ({ navigation }: RootTabScreenProps<'MyRewards'>) => {
       </View>
     );
   }
+  return <Text> No Items Presented</Text>;
 };
 
 const styles = StyleSheet.create({

@@ -10,7 +10,7 @@ const StartScreen = ({ navigation }: RootStackScreenProps<'StartScreen'>) => {
 
   return (
     <Background>
-      <Text>The easiest way to start with your amazing application.</Text>
+      <Text>Welcome to Peer Rewards</Text>
       <Button mode="contained" onPress={handleLoginClick}>
         Login
       </Button>

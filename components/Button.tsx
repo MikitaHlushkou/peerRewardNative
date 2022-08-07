@@ -1,8 +1,6 @@
 import React, { ReactNode } from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 import { Button as PaperButton } from 'react-native-paper';
-import useColorScheme from '../hooks/useColorScheme';
-import Colors from '../constants/Colors';
 import { theme } from '../themesConfig/theme';
 
 interface CustomButtonProps {
@@ -12,14 +10,13 @@ interface CustomButtonProps {
   onPress?: () => void;
 }
 const Button = ({ mode, style, children, ...props }: CustomButtonProps) => {
-  const colorScheme = useColorScheme();
   return (
     <PaperButton
       style={[
         styles.button,
         mode === 'outlined' && {
-          backgroundColor: Colors[colorScheme].surface,
-          borderColor: Colors[colorScheme].text,
+          backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.text,
         },
         style,
       ]}

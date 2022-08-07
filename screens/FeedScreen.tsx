@@ -1,10 +1,13 @@
 import React from 'react';
-import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text } from 'react-native';
-import { Separator, View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
-import RewardMessage from '../components/RewardMessage';
+import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native';
+// hooks
 import useRewards from '../hooks/useRewards';
+// UI
+import { Separator } from '../components/Separator';
+import Background from '../components/Background';
+import RewardMessage from '../components/RewardMessage';
 import { getFormattedRewardsArray } from '../utils/rewardUtils';
+import { RootTabScreenProps } from '../types';
 
 const FeedScreen = ({ navigation }: RootTabScreenProps<'Feed'>) => {
   const { error, status, data } = useRewards();
@@ -21,16 +24,16 @@ const FeedScreen = ({ navigation }: RootTabScreenProps<'Feed'>) => {
   if (data) {
     const rewardMessages = getFormattedRewardsArray(data);
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.container}>
-          <FlatList
-            ItemSeparatorComponent={Separator}
-            ListFooterComponent={Separator}
-            data={rewardMessages}
-            renderItem={RewardMessage}
-          />
-        </View>
-      </SafeAreaView>
+      <Background>
+        <FlatList
+          style={styles.container}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={Separator}
+          ListFooterComponent={Separator}
+          data={rewardMessages}
+          renderItem={RewardMessage}
+        />
+      </Background>
     );
   }
   return <Text> No Items Presented</Text>;
@@ -39,9 +42,7 @@ const FeedScreen = ({ navigation }: RootTabScreenProps<'Feed'>) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 'fit-content',
+    width: '100%',
   },
 });
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { object, string } from 'yup';
 import { useFormik } from 'formik';
 import { TouchableOpacity, StyleSheet, View } from 'react-native';
@@ -12,6 +12,10 @@ import BackButton from '../components/BackButton';
 import { RootStackScreenProps } from '../types';
 // Styles
 import { theme } from '../themesConfig/theme';
+import { useMutation } from '@tanstack/react-query';
+import { login } from '../service/rewardsApi';
+import { useAuth } from '../hooks/useAuth';
+import Paragraph from '../components/Paragraph';
 
 const validationSchema = object({
   email: string().required('Please Enter your email'),
@@ -19,13 +23,22 @@ const validationSchema = object({
 });
 
 const LoginScreen = ({ navigation }: RootStackScreenProps<'LoginScreen'>) => {
-  const { handleChange, handleBlur, values, errors, handleSubmit } = useFormik({
+  const { setUserData } = useAuth();
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const { data, mutate } = useMutation(login);
+
+  const { handleChange, handleBlur, values, errors, handleSubmit, setErrors } = useFormik({
     initialValues: { email: '', password: '' },
     validationSchema,
-    onSubmit: (values) => {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Root' }],
+    onSubmit: async (values) => {
+      mutate(values, {
+        onError: (e) => {
+          setErrorMessage(e?.response?.data?.message);
+        },
+        onSuccess: (data) => {
+          setUserData(data);
+        },
       });
     },
   });
@@ -39,7 +52,12 @@ const LoginScreen = ({ navigation }: RootStackScreenProps<'LoginScreen'>) => {
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />
-      <Text>Welcome back.</Text>
+
+      {errorMessage ? (
+        <Paragraph style={styles.error}>{errorMessage}</Paragraph>
+      ) : (
+        <Paragraph>Welcome back.</Paragraph>
+      )}
       <TextInput
         label="Email"
         returnKeyType="next"
@@ -84,6 +102,10 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     marginTop: 4,
+  },
+  error: {
+    fontSize: 18,
+    color: theme.colors.error,
   },
   forgot: {
     fontSize: 13,

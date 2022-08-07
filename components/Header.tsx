@@ -1,27 +1,22 @@
-import { Pressable, StyleSheet } from 'react-native';
+import React from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
-import { Text, View } from './Themed';
+import { Paragraph } from 'react-native-paper';
+// styles
+import { theme } from '../themesConfig/theme';
 
 const Header = ({ navigation }: NativeStackHeaderProps) => {
-  const colorScheme = useColorScheme();
   return (
     <View style={styles.container}>
-      <Text style={styles.headerTitle}>Peer Rewards</Text>
+      <Paragraph style={styles.headerTitle}>Peer Rewards</Paragraph>
       <Pressable
         onPress={() => navigation.navigate('Modal')}
         style={({ pressed }) => ({
           opacity: pressed ? 0.5 : 1,
         })}
       >
-        <FontAwesome
-          name="plus"
-          size={25}
-          color={Colors[colorScheme].text}
-          style={{ marginRight: 15 }}
-        />
+        <FontAwesome name="plus" size={25} color={theme.colors.text} style={styles.icon} />
       </Pressable>
     </View>
   );
@@ -37,6 +32,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 8,
+  },
+  icon: {
+    marginRight: 15,
   },
 });
 

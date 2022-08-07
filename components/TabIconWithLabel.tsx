@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native';
-
+import React, { ComponentProps } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { ComponentProps } from 'react';
+import { Paragraph } from 'react-native-paper';
 
 interface ITabIconWithLabel {
   color: string;
@@ -15,7 +15,7 @@ const TabIconWithLabel = ({ color, iconName, label, size = 30 }: ITabIconWithLab
   return (
     <View style={tabStyles.container}>
       <FontAwesome size={size} style={tabStyles.icon} name={iconName} color={color} />
-      <Text style={tabStyles.label}>{label}</Text>
+      <Paragraph style={tabStyles.label}>{label}</Paragraph>
     </View>
   );
 };

@@ -28,9 +28,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 20,
     width: '100%',
-    maxWidth: 340,
+    padding: 20,
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',

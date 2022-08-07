@@ -1,6 +1,7 @@
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MaterialBottomTabScreenProps } from '@react-navigation/material-bottom-tabs/lib/typescript/src/types';
+import { Dispatch, SetStateAction } from 'react';
 
 declare global {
   namespace ReactNavigation {
@@ -32,3 +33,7 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
   MaterialBottomTabScreenProps<RootTabParamList, Screen>,
   NativeStackScreenProps<RootStackParamList>
 >;
+
+export type Nullable<T> = T | null;
+export type StateHandler<T> = Dispatch<SetStateAction<T>>;
+export type EmptyObject = Record<string, never>;

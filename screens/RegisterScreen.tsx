@@ -1,15 +1,22 @@
 import React from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { object, string } from 'yup';
 import { useFormik } from 'formik';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
+// hooks
+import { useAuth } from '../hooks/useAuth';
 // UI
 import { Text } from 'react-native-paper';
 import Background from '../components/Background';
 import Button from '../components/Button';
 import BackButton from '../components/BackButton';
 import TextInput from '../components/TextInput';
+import Paragraph from '../components/Paragraph';
+// service
+import { register } from '../service/rewardsApi';
 // Types
 import { RootStackScreenProps } from '../types';
+import { ISignUpCredentials } from '../service/types';
 // Styles
 import { theme } from '../themesConfig/theme';
 
@@ -25,14 +32,18 @@ const validationSchema = object({
 });
 
 const RegisterScreen = ({ navigation }: RootStackScreenProps<'RegisterScreen'>) => {
+  const { mutate } = useMutation(register, {
+    onSuccess: (data) => {
+      setUserData(data);
+    },
+  });
+  const { setUserData } = useAuth();
+
   const { handleChange, handleBlur, values, errors, handleSubmit } = useFormik({
     initialValues: { name: '', email: '', password: '' },
     validationSchema,
-    onSubmit: (values) => {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Root' }],
-      });
+    onSubmit: (values: ISignUpCredentials) => {
+      mutate(values);
     },
   });
 
@@ -45,7 +56,7 @@ const RegisterScreen = ({ navigation }: RootStackScreenProps<'RegisterScreen'>) 
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />
-      <Text>Create Account</Text>
+      <Paragraph>Create Account</Paragraph>
       <TextInput
         label="Name"
         returnKeyType="next"
@@ -84,7 +95,7 @@ const RegisterScreen = ({ navigation }: RootStackScreenProps<'RegisterScreen'>) 
         onBlur={handleBlur('password')}
         value={password}
       />
-      <Button mode="contained" onPress={handleSignUpClick} style={{ marginTop: 24 }}>
+      <Button mode="contained" onPress={handleSignUpClick} style={styles.signUpButton}>
         Sign Up
       </Button>
       <View style={styles.row}>
@@ -105,6 +116,9 @@ const styles = StyleSheet.create({
   link: {
     fontWeight: 'bold',
     color: theme.colors.primary,
+  },
+  signUpButton: {
+    marginTop: 24,
   },
 });
 

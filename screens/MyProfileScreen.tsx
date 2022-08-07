@@ -1,13 +1,22 @@
-import { SafeAreaView, StyleSheet } from 'react-native';
+import React from 'react';
+import { Image, StyleSheet } from 'react-native';
+import { useAuth } from '../hooks/useAuth';
 
-import { View } from '../components/Themed';
+import Paragraph from '../components/Paragraph';
+import Background from '../components/Background';
 import { RootTabScreenProps } from '../types';
 
 const MyProfileScreen = ({ navigation }: RootTabScreenProps<'MyProfile'>) => {
+  const {
+    userData: { accountMoney, sendMoneyAmount, userAvatarUrl, name },
+  } = useAuth();
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}></View>
-    </SafeAreaView>
+    <Background>
+      <Paragraph style={styles.name}>{name}</Paragraph>
+      <Image style={styles.avatar} source={{ uri: userAvatarUrl }} />
+      <Paragraph style={styles.title}>My Rewards: $ {accountMoney}</Paragraph>
+      <Paragraph style={styles.title}>Give: $ {sendMoneyAmount}</Paragraph>
+    </Background>
   );
 };
 
@@ -17,9 +26,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    fontSize: 20,
+  name: {
+    fontSize: 30,
     fontWeight: 'bold',
+    paddingVertical: 20,
+  },
+
+  title: {
+    padding: 10,
+    fontSize: 25,
+    fontWeight: 'bold',
+  },
+  avatar: {
+    width: 50,
+    height: 50,
   },
 });
 

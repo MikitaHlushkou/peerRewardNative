@@ -1,14 +1,28 @@
-import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native';
-
-import { Separator, View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
 import React from 'react';
-import useRewards from '../hooks/useRewards';
+import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native';
+import { useQuery } from '@tanstack/react-query';
+
+// hooks
+import { useAuth } from '../hooks/useAuth';
+// UI
+import { Separator } from '../components/Separator';
 import RewardMessage from '../components/RewardMessage';
+import Background from '../components/Background';
+import Paragraph from '../components/Paragraph';
+// utils
 import { getFormattedRewardsArray } from '../utils/rewardUtils';
+import { getUserRewards } from '../service/rewardsApi';
+// types
+import { RootTabScreenProps } from '../types';
+// styles
+import { theme } from '../themesConfig/theme';
 
 const MyRewardsScreen = ({ navigation }: RootTabScreenProps<'MyRewards'>) => {
-  const { error, status, data } = useRewards();
+  const {
+    userData: { name },
+  } = useAuth();
+
+  const { error, data, status } = useQuery(['userRewards', name], () => getUserRewards(name));
 
   if (status === 'loading') {
     return <ActivityIndicator size="large" color="#00ff00" />;
@@ -16,21 +30,21 @@ const MyRewardsScreen = ({ navigation }: RootTabScreenProps<'MyRewards'>) => {
 
   if (status === 'error') {
     if (error instanceof Error) {
-      return <Text style={{ color: 'white' }}> Error: {error?.message}</Text>;
+      return <Paragraph style={styles.error}> Error: {error?.message}</Paragraph>;
     }
   }
   if (data) {
-    const onlyUserRewards = data.filter(({ userId }) => userId === 'Test userID');
-    const rewardMessages = getFormattedRewardsArray(onlyUserRewards);
+    const rewardMessages = getFormattedRewardsArray(data);
     return (
-      <View style={styles.container}>
+      <Background>
         <FlatList
-          contentContainerStyle={{ paddingBottom: 20 }}
+          showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={Separator}
+          ListFooterComponent={Separator}
           data={rewardMessages}
           renderItem={RewardMessage}
         />
-      </View>
+      </Background>
     );
   }
   return <Text> No Items Presented</Text>;
@@ -45,6 +59,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  error: {
+    color: theme.colors.error,
   },
 });
 

@@ -1,6 +1,7 @@
+import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { Text } from './Themed';
 import moment from 'moment';
+import { Paragraph } from 'react-native-paper';
 
 export interface IRewardMessage {
   userFullName: string;
@@ -8,6 +9,8 @@ export interface IRewardMessage {
   senderFullName: string;
   createdAt: string | Date;
   message: string;
+  userId?: string;
+  reward: string;
 }
 
 const RewardMessage = ({ item }: { item: IRewardMessage }) => {
@@ -17,9 +20,9 @@ const RewardMessage = ({ item }: { item: IRewardMessage }) => {
       <Image style={style.image} source={{ uri: userAvatarUrl }} />
 
       <View style={style.rewardInfoContainer}>
-        <Text>{`${userFullName} rewarded by ${senderFullName}`}</Text>
-        <Text style={style.dateText}>{moment(createdAt).format('MM/DD HH:MM')}</Text>
-        <Text>{message}</Text>
+        <Paragraph>{`${userFullName} rewarded by ${senderFullName}`}</Paragraph>
+        <Paragraph style={style.dateText}>{moment(createdAt).format('MM/DD HH:MM')}</Paragraph>
+        <Paragraph>{message}</Paragraph>
       </View>
     </View>
   );
@@ -28,12 +31,13 @@ const RewardMessage = ({ item }: { item: IRewardMessage }) => {
 const style = StyleSheet.create({
   container: {
     display: 'flex',
-    flexDirection: 'row',
     flex: 1,
+    flexDirection: 'row',
+    minWidth: '90%',
   },
   rewardInfoContainer: {
+    flex: 1,
     padding: 8,
-    maxWidth: '85%',
   },
   dateText: {
     fontSize: 12,
@@ -43,7 +47,6 @@ const style = StyleSheet.create({
     width: 40,
     height: 40,
   },
-  message: {},
 });
 
 export default RewardMessage;

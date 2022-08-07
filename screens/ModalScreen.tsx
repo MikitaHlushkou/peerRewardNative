@@ -1,20 +1,18 @@
-import {
-  Button,
-  GestureResponderEvent,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import { useFormik } from 'formik';
-
-import { ModalView, Text, ThemedInput, View } from '../components/Themed';
-import { RootStackScreenProps } from '../types';
 import React from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { addNewReward } from '../service/rewardsApi';
+import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { useFormik } from 'formik';
+import { object, string, number } from 'yup';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { IRewardMessage } from '../components/RewardMessage';
+import TextInput from '../components/TextInput';
+import Background from '../components/Background';
+import Button from '../components/Button';
+import Paragraph from '../components/Paragraph';
+import { useAuth } from '../hooks/useAuth';
+import { addNewReward } from '../service/rewardsApi';
+
+import { RootStackScreenProps } from '../types';
 
 interface IRewardForm {
   name: string;
@@ -22,76 +20,110 @@ interface IRewardForm {
   message: string;
 }
 
+const validationSchema = (maxReward: string) =>
+  object({
+    name: string().required('Please Provide Name'),
+    message: string(),
+    reward: number()
+      .max(+maxReward, `You are limited with ${maxReward}`)
+      .required('Reward is Required'),
+  });
+
 export default function ModalScreen({ navigation }: RootStackScreenProps<'Modal'>) {
+  const {
+    userData: { id, name: UserFullName, userAvatarUrl, accountMoney },
+  } = useAuth();
+
+  const queryClient = useQueryClient();
+
   const initialFormValues = { name: '', reward: '', message: '' };
 
-  const mutation = useMutation(addNewReward);
-
-  const { handleSubmit, handleChange, handleBlur, values } = useFormik({
-    initialValues: initialFormValues,
-    onSubmit: (formValues: IRewardForm) => {
+  const { mutate } = useMutation(addNewReward, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['userRewards']);
+      queryClient.invalidateQueries(['rewards']);
       navigation.navigate('Root');
-      const reward: IRewardMessage = {
-        ...formValues,
-        userAvatarUrl: 'https://robohash.org/facerevoluptatemquia.png?size=50x50&set=set1',
-        senderFullName: 'new test full name',
-        userFullName: 'jacob jss',
-        createdAt: new Date(),
-        userId: 'Jacob',
-      };
-      mutation.mutate(reward);
-
-      console.log('form values', formValues);
     },
   });
 
-  const handleSubmitForm = (e: GestureResponderEvent) => handleSubmit();
+  const { handleSubmit, handleChange, handleBlur, values, errors } = useFormik({
+    initialValues: initialFormValues,
+    validationSchema: validationSchema(accountMoney),
+    onSubmit: (formValues: IRewardForm) => {
+      const { name, reward } = formValues;
+
+      const rewardEntity: IRewardMessage = {
+        ...formValues,
+        userAvatarUrl,
+        senderFullName: UserFullName,
+        userFullName: name,
+        createdAt: new Date(),
+        userId: id,
+        reward,
+      };
+      mutate(rewardEntity);
+    },
+  });
+
+  const handleSubmitForm = () => handleSubmit();
 
   const { name, reward, message } = values;
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1 }}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ModalView style={styles.container}>
-          <Text style={styles.title}>Reward a Person </Text>
-          <ThemedInput
-            style={styles.input}
+    <Background>
+      <TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <Paragraph style={styles.title}>Reward a Person </Paragraph>
+          <Paragraph style={styles.title}>
+            You have left in your account: $ {accountMoney}
+          </Paragraph>
+
+          <TextInput
+            label="To"
             key={'name'}
-            nativeID={'name'}
-            placeholder={'Name of awarded person'}
+            returnKeyType="next"
+            nativeID={'RewardName'}
+            textContentType="name"
+            error={!!errors.name}
+            errorText={errors.name}
             onChangeText={handleChange('name')}
-            onBlur={handleBlur(name)}
+            onBlur={handleBlur('name')}
             value={name}
           />
-          <ThemedInput
-            style={styles.input}
+
+          <TextInput
+            label="Reward"
+            returnKeyType="next"
             keyboardType={'number-pad'}
             key={'reward'}
+            error={!!errors.reward}
+            errorText={errors.reward}
             nativeID={'reward'}
-            placeholder={'Reward'}
             onChangeText={handleChange('reward')}
-            onBlur={handleBlur(reward)}
-            value={`${reward}`}
+            onBlur={handleBlur('reward')}
+            value={reward}
           />
-          <ThemedInput
-            style={styles.textForm}
+
+          <TextInput
+            label={'Why?'}
             key={'message'}
+            returnKeyType="done"
             nativeID={'message'}
+            error={!!errors.message}
+            errorText={errors.message}
             onChangeText={handleChange('message')}
             onBlur={handleBlur('message')}
-            placeholder={'Comment'}
             editable
             multiline
             value={message}
           />
-          <View style={styles.buttonContainer}>
-            <Button color={'#2196f3'} onPress={handleSubmitForm} title="Submit" />
-          </View>
-        </ModalView>
+
+          <Button mode="contained" onPress={handleSubmitForm}>
+            Submit
+          </Button>
+          <View style={{ height: 60 }} />
+        </View>
       </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+    </Background>
   );
 }
 
@@ -99,7 +131,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    justifyContent: 'center',
   },
   title: {
     fontSize: 20,
@@ -122,9 +153,5 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingVertical: 14,
     paddingHorizontal: 18,
-  },
-  buttonContainer: {
-    flex: 1,
-    marginVertical: 10,
   },
 });

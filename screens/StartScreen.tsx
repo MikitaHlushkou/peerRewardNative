@@ -1,8 +1,8 @@
 import React from 'react';
 import Background from '../components/Background';
 import Button from '../components/Button';
-import { Text } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
+import Paragraph from '../components/Paragraph';
 
 const StartScreen = ({ navigation }: RootStackScreenProps<'StartScreen'>) => {
   const handleLoginClick = () => navigation.navigate('LoginScreen');
@@ -10,7 +10,7 @@ const StartScreen = ({ navigation }: RootStackScreenProps<'StartScreen'>) => {
 
   return (
     <Background>
-      <Text>Welcome to Peer Rewards</Text>
+      <Paragraph>Welcome to Peer Rewards</Paragraph>
       <Button mode="contained" onPress={handleLoginClick}>
         Login
       </Button>

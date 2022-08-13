@@ -1,8 +1,13 @@
 import React from 'react';
-import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Keyboard,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { useFormik } from 'formik';
 import { object, string, number } from 'yup';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { IRewardMessage } from '../components/RewardMessage';
 import TextInput from '../components/TextInput';
@@ -10,7 +15,7 @@ import Background from '../components/Background';
 import Button from '../components/Button';
 import Paragraph from '../components/Paragraph';
 import { useAuth } from '../hooks/useAuth';
-import { addNewReward } from '../service/rewardsApi';
+import { addNewReward, fetchUserAccount } from '../service/rewardsApi';
 
 import { RootStackScreenProps } from '../types';
 
@@ -32,16 +37,24 @@ const validationSchema = (maxReward: string) =>
 export default function ModalScreen({ navigation }: RootStackScreenProps<'Modal'>) {
   const {
     userData: { id, name: UserFullName, userAvatarUrl, accountMoney },
+    setUserData,
   } = useAuth();
 
   const queryClient = useQueryClient();
 
   const initialFormValues = { name: '', reward: '', message: '' };
 
-  const { mutate } = useMutation(addNewReward, {
+  const { mutate, isSuccess } = useMutation(addNewReward, {
     onSuccess: () => {
       queryClient.invalidateQueries(['userRewards']);
       queryClient.invalidateQueries(['rewards']);
+    },
+  });
+
+  useQuery(['fetchUserAccount', id], () => fetchUserAccount(id), {
+    enabled: isSuccess,
+    onSuccess: (data) => {
+      setUserData((prevState) => ({ ...prevState, ...data }));
       navigation.navigate('Root');
     },
   });
@@ -102,7 +115,6 @@ export default function ModalScreen({ navigation }: RootStackScreenProps<'Modal'
             onBlur={handleBlur('reward')}
             value={reward}
           />
-
           <TextInput
             label={'Why?'}
             key={'message'}
@@ -120,7 +132,7 @@ export default function ModalScreen({ navigation }: RootStackScreenProps<'Modal'
           <Button mode="contained" onPress={handleSubmitForm}>
             Submit
           </Button>
-          <View style={{ height: 60 }} />
+          {/*<View style={{ height: 60 }} />*/}
         </View>
       </TouchableWithoutFeedback>
     </Background>
@@ -137,21 +149,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
-  },
-  input: {
-    borderRadius: 20,
-    borderColor: '#2196f3',
-    borderWidth: 3,
-    marginVertical: 10,
-    paddingVertical: 14,
-    paddingHorizontal: 18,
-  },
-  textForm: {
-    borderRadius: 20,
-    borderColor: '#2196f3',
-    borderWidth: 3,
-    marginVertical: 10,
-    paddingVertical: 14,
-    paddingHorizontal: 18,
   },
 });

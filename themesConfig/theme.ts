@@ -10,5 +10,6 @@ export const theme = {
     error: '#f13a59',
     placeholder: '#ffffff',
     separator: '#eee',
+    backgroundDisabled: '#EEEEEE',
   },
 };

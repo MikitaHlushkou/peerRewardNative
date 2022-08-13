@@ -26,6 +26,13 @@ const addNewReward = async (rewardMessage: IRewardMessage) => {
   return response.data;
 };
 
+const fetchUserAccount = async (userId: string) => {
+  const response = await apiClient.get<Pick<IUserProfile, 'sendMoneyAmount' | 'accountMoney'>>(
+    `/user/${userId}`,
+  );
+  return response.data;
+};
+
 const login = async (values: ILoginUserCredentials) => {
   const response = await apiClient.post<IUserProfile>('/user/login', values);
   return response.data;
@@ -36,4 +43,4 @@ const register = async (values: ISignUpCredentials) => {
   return response.data;
 };
 
-export { getAllRewards, getUserRewards, addNewReward, login, register };
+export { getAllRewards, getUserRewards, addNewReward, login, register, fetchUserAccount };

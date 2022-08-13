@@ -1,19 +1,26 @@
 import React, { ReactNode } from 'react';
-import { ImageBackground, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { ImageBackground, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { theme } from '../themesConfig/theme';
+import { useHeaderHeight } from '@react-navigation/elements';
 
 interface BackgroundProps {
   children?: ReactNode;
 }
 
 const Background = ({ children }: BackgroundProps) => {
+  const height = useHeaderHeight();
   return (
     <ImageBackground
       source={require('../assets/images/background_dot.png')}
       resizeMode="repeat"
       style={styles.background}
     >
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={height}
+        enabled
+      >
         {children}
       </KeyboardAvoidingView>
     </ImageBackground>

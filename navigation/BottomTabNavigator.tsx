@@ -19,7 +19,7 @@ const BottomTabNavigator = () => {
       initialRouteName="Feed"
       tabBarPosition={'bottom'}
       screenOptions={{
-        tabBarInactiveTintColor: theme.colors.disabled,
+        tabBarInactiveTintColor: theme.colors.backgroundDisabled,
       }}
     >
       <Tab.Screen

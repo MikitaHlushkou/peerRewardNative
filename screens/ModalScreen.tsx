@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Keyboard,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { useFormik } from 'formik';
 import { object, string, number } from 'yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

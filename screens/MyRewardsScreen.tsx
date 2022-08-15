@@ -33,7 +33,7 @@ const MyRewardsScreen = ({ navigation }: RootTabScreenProps<'MyRewards'>) => {
       return <Paragraph style={styles.error}> Error: {error?.message}</Paragraph>;
     }
   }
-  if (data) {
+  if (!!data?.length) {
     const rewardMessages = getFormattedRewardsArray(data);
     return (
       <Background>

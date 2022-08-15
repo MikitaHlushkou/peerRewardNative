@@ -52,10 +52,10 @@ function RootNavigator() {
           </Stack.Group>
         </Stack.Navigator>
       ) : (
-        <Stack.Navigator initialRouteName={'StartScreen'} screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="StartScreen" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="StartScreen" component={StartScreen} />
-          <Stack.Screen name={'RegisterScreen'} component={RegisterScreen} />
-          <Stack.Screen name={'LoginScreen'} component={LoginScreen} />
+          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
         </Stack.Navigator>
       )}
     </>

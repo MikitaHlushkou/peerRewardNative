@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 
 // hooks
@@ -9,6 +9,7 @@ import { Separator } from '../components/Separator';
 import RewardMessage from '../components/RewardMessage';
 import Background from '../components/Background';
 import Paragraph from '../components/Paragraph';
+import NoItemsExist from '../components/NoItemsExist';
 // utils
 import { getFormattedRewardsArray } from '../utils/rewardUtils';
 import { getUserRewards } from '../service/rewardsApi';
@@ -47,7 +48,7 @@ const MyRewardsScreen = ({ navigation }: RootTabScreenProps<'MyRewards'>) => {
       </Background>
     );
   }
-  return <Text> No Items Presented</Text>;
+  return <NoItemsExist />;
 };
 
 const styles = StyleSheet.create({

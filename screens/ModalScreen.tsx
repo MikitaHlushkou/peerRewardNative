@@ -1,5 +1,5 @@
 import React from 'react';
-import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { useFormik } from 'formik';
 import { object, string, number } from 'yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -78,57 +78,54 @@ export default function ModalScreen({ navigation }: RootStackScreenProps<'Modal'
   const { name, reward, message } = values;
   return (
     <Background>
-      <TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-          <Paragraph style={styles.title}>Reward a Person </Paragraph>
-          <Paragraph style={styles.title}>
-            You have left in your account: $ {accountMoney}
-          </Paragraph>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.container}>
+            <Paragraph style={styles.title}>Reward a Person. You have $ {accountMoney} </Paragraph>
+            <TextInput
+              label="To"
+              key={'name'}
+              returnKeyType="next"
+              nativeID={'RewardName'}
+              textContentType="name"
+              error={!!errors.name}
+              errorText={errors.name}
+              onChangeText={handleChange('name')}
+              onBlur={handleBlur('name')}
+              value={name}
+            />
 
-          <TextInput
-            label="To"
-            key={'name'}
-            returnKeyType="next"
-            nativeID={'RewardName'}
-            textContentType="name"
-            error={!!errors.name}
-            errorText={errors.name}
-            onChangeText={handleChange('name')}
-            onBlur={handleBlur('name')}
-            value={name}
-          />
+            <TextInput
+              label="Reward"
+              returnKeyType="next"
+              keyboardType={'number-pad'}
+              key={'reward'}
+              error={!!errors.reward}
+              errorText={errors.reward}
+              nativeID={'reward'}
+              onChangeText={handleChange('reward')}
+              onBlur={handleBlur('reward')}
+              value={reward}
+            />
+            <TextInput
+              label={'Why?'}
+              key={'message'}
+              returnKeyType="done"
+              nativeID={'message'}
+              error={!!errors.message}
+              errorText={errors.message}
+              onChangeText={handleChange('message')}
+              onBlur={handleBlur('message')}
+              editable
+              multiline
+              value={message}
+            />
 
-          <TextInput
-            label="Reward"
-            returnKeyType="next"
-            keyboardType={'number-pad'}
-            key={'reward'}
-            error={!!errors.reward}
-            errorText={errors.reward}
-            nativeID={'reward'}
-            onChangeText={handleChange('reward')}
-            onBlur={handleBlur('reward')}
-            value={reward}
-          />
-          <TextInput
-            label={'Why?'}
-            key={'message'}
-            returnKeyType="done"
-            nativeID={'message'}
-            error={!!errors.message}
-            errorText={errors.message}
-            onChangeText={handleChange('message')}
-            onBlur={handleBlur('message')}
-            editable
-            multiline
-            value={message}
-          />
-
-          <Button mode="contained" onPress={handleSubmitForm}>
-            Submit
-          </Button>
-          {/*<View style={{ height: 60 }} />*/}
-        </View>
+            <Button mode="contained" onPress={handleSubmitForm}>
+              Submit
+            </Button>
+          </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
     </Background>
   );
@@ -137,12 +134,11 @@ export default function ModalScreen({ navigation }: RootStackScreenProps<'Modal'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginVertical: 10,
+    marginVertical: 5,
   },
 });

@@ -6,6 +6,7 @@ import useRewards from '../hooks/useRewards';
 import { Separator } from '../components/Separator';
 import Background from '../components/Background';
 import RewardMessage from '../components/RewardMessage';
+import NoItemsExist from '../components/NoItemsExist';
 import { getFormattedRewardsArray } from '../utils/rewardUtils';
 import { RootTabScreenProps } from '../types';
 
@@ -21,7 +22,7 @@ const FeedScreen = ({ navigation }: RootTabScreenProps<'Feed'>) => {
       return <Text style={{ color: 'white' }}> Error: {error?.message}</Text>;
     }
   }
-  if (data) {
+  if (!!data?.length) {
     const rewardMessages = getFormattedRewardsArray(data);
     return (
       <Background>
@@ -36,7 +37,7 @@ const FeedScreen = ({ navigation }: RootTabScreenProps<'Feed'>) => {
       </Background>
     );
   }
-  return <Text> No Items Presented</Text>;
+  return <NoItemsExist />;
 };
 
 const styles = StyleSheet.create({
